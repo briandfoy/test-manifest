@@ -1,5 +1,9 @@
 $Id$
 
+1.11 - Sat Sep 25 18:43:38 2004
+	* This is a release version.  It's the same code as 0.95
+	* Some doc updates
+
 0.95 - Thu Sep  2 15:59:26 2004
 * Test::Manifest is now more tolerant of sloppiness.  It strips leading
 and trailing whitespace as it reads lines from test_manifest, and it
