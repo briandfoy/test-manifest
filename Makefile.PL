@@ -7,7 +7,8 @@ WriteMakefile
         'VERSION_FROM'  => 'lib/Manifest.pm',
         
 		'PREREQ_PM' => {
-			'Test::More'       => '0',
+			'Test::More'          => '0',
+			'ExtUtils::MakeMaker' => '6.03',
 			},
 			
         'PM'       => 
