@@ -11,7 +11,7 @@ use Exporter;
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = 0.93;
+$VERSION = 0.95;
 
 my $Manifest = "t/test_manifest";
 
@@ -27,7 +27,7 @@ See the functions section.
 
 MakeMaker assumes that you want to run all of the .t files
 in the t/ directory in ascii-betical order during C<make test>
-unless you say otherwise.  This leads to some interesting 
+unless you say otherwise.  This leads to some interesting
 naming schemes for test files to get them in the desired order.
 
 You can specify any order or any files that you like, though,
@@ -45,29 +45,29 @@ do the right thing.
 Run all of the files in t/test_manifest through Test::Harness:runtests
 in the order they appear in the file.
 
-If you want to use this, in Makefile.PL you need to override some 
+If you want to use this, in Makefile.PL you need to override some
 MakeMaker magic (after you load ExtUtils::MakeMaker).  I recommend
 putting something like this directly in Makefile.PL so it does not
 depend on anything else.  A Makefile.PL with dependencies is a big
 headache.
 
 	eval "use Test::Manifest";
-	
+
 	unless( $@ )
 		{
 		* ExtUtils::MM_Any::test_via_harness = sub
 			{
 			my($self, $perl, $tests) = @_;
-		
+
 			return qq|\t$perl "-MTest::Manifest" | .
 				   qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
 				   qq|'\$(INST_ARCHLIB)')"\n|;
 			}
 		}
-		
+
 =cut
 
-sub run_t_manifest 
+sub run_t_manifest
 	{
 	require Test::Harness;
 	require File::Spec;
@@ -79,7 +79,7 @@ sub run_t_manifest
 
 	my @files = get_t_files();
 	print STDERR "Test::Manifest::test_harness found [@files]\n";
-	
+
 	Test::Harness::runtests( @files );
 	}
 
@@ -103,17 +103,19 @@ sub get_t_files()
 	{
 	carp( "$Manifest does not exist!" ) unless -e $Manifest;
 	return unless open my( $fh ), $Manifest;
-	
+
 	my @tests = ();
-	
+
 	while( <$fh> )
 		{
 		chomp;
+		s/^\s+|\s+$//g;
+		next if m/^#/;
 		carp( "test file begins with t/ [$_]" ) if m|^t/|;
 		push @tests, "t/$_" if -e "t/$_";
 		}
 	close $fh;
-		
+
 	return wantarray ? @tests : join " ", @tests;
 	}
 
@@ -132,7 +134,7 @@ sub make_test_manifest()
 	{
 	carp( "t/ directory does not exist!" ) unless -d "t";
 	return unless open my( $fh ), "> $Manifest";
-	
+
 	my $count = 0;
 	while( my $file = glob("t/*.t") )
 		{
@@ -141,7 +143,7 @@ sub make_test_manifest()
 		$count++;
 		}
 	close $fh;
-	
+
 	return $count;
 	}
 
@@ -155,14 +157,14 @@ sub manifest_name
 	{
 	return $Manifest;
 	}
-	
+
 =head1 SOURCE AVAILABILITY
 
 This source is part of a SourceForge project which always has the
 latest sources in CVS, as well as all of the previous releases.
 
 	http://sourceforge.net/projects/brian-d-foy/
-	
+
 If, for some reason, I disappear from the world, one of the other
 members of the project can shepherd this module appropriately.
 
@@ -172,11 +174,11 @@ C<brian d foy>, E<lt>bdfoy@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, C<brian d foy>, All Rights Reserved
+Copyright 2002-2004, brian d foy, All Rights Reserved
 
 You may use and distribute this module under the same terms
 as Perl itself
 
 =cut
-	
+
 1;
