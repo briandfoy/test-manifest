@@ -1,0 +1,7 @@
+MANIFEST
+Makefile.PL
+lib/Manifest.pm
+t/0.load.t
+t/1.get_test_files.t
+t/1.make_test_manifest.t
+test_manifest
