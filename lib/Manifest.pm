@@ -55,7 +55,7 @@ This interesting names ossify when they get into source control,
 and get even more interesting as more tests show up.
 
 Test::Manifest overrides the default behaviour by replacing the
-test_via_harness target in the Makefiel.  Instead of running at the
+test_via_harness target in the Makefile.  Instead of running at the
 t/*.t files in ascii-betical order, it looks in the t/test_manifest file
 to find out which tests you want to run and the order in which you want
 to run them.  It constructs the right value for MakeMaker to do the
