@@ -1,5 +1,11 @@
 $Id$
 
+1.14 - Sat Mar 26 20:55:45 2005
+	* put paths together with File::Spec (so this should work on
+	Windows
+	* You can now define levels of testing with TEST_LEVEL (e.g.
+	make test TEST_LEVEL=2)
+
 1.13 - Sat Mar 19 12:36:04 2005
 	* Added POD Coverage tests
 	* No more fooling with ExtUtils::* ---> put things in MY::* to
