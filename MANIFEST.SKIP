@@ -2,7 +2,7 @@
 .cvsignore
 .lwpcookies
 .DS_Store
-Test-MANIFEST-*
+Test-Manifest-*
 blib/
 hacks/
 CVS
@@ -14,3 +14,5 @@ Makefile$
 ~$
 .rej$
 t/test_manifest
+.bak$
+.old$
