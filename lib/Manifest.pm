@@ -100,7 +100,7 @@ entries start with "t/".
 sub get_t_files()
 	{
 	carp( "$Manifest does not exist!" ) unless -e $Manifest;
-	return unless open my $fh, $Manifest;
+	return unless open( my $fh, $Manifest );
 	
 	my @tests = ();
 	
@@ -110,6 +110,7 @@ sub get_t_files()
 		carp( "test file begins with t/ [$_]" ) if m|^t/|;
 		push @tests, "t/$_" if -e "t/$_";
 		}
+	close $fh;
 		
 	return wantarray ? @tests : join " ", @tests;
 	}
@@ -128,7 +129,7 @@ TO DO: specify files to skip.
 sub make_test_manifest()
 	{
 	carp( "t/ directory does not exist!" ) unless -d "t";
-	return unless open my $fh, "> $Manifest";
+	return unless open( my $fh, "> $Manifest" );
 	
 	my $count = 0;
 	while( my $file = glob("t/*.t") )
@@ -137,6 +138,7 @@ sub make_test_manifest()
 		print $fh "$file\n";
 		$count++;
 		}
+	close $fh;
 	
 	return $count;
 	}

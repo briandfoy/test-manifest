@@ -20,7 +20,7 @@ close OUT;
 my @tests = ();
 
 print "bail out! Could not open manifest!"
-	unless open my $in, $test_manifest;
+	unless open( my $in, $test_manifest );
 
 while( <$in> )
 	{
