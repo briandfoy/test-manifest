@@ -14,6 +14,11 @@ WriteMakefile
         	{
             'lib/Manifest.pm'  => '$(INST_LIBDIR)/Manifest.pm',
             },
-            
+          
+        'MAN3PODS' =>
+        	{
+        	'lib/Manifest.pm' => '$(INST_MAN3DIR)/Test::Manifest.3',
+        	},
+        	
         clean => { FILES => 'Test-Manifest-* t/test_manifest' },
         );
