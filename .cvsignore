@@ -2,3 +2,6 @@ Test-Manifest-*
 .lwpcookies
 .DS_Store
 t/test_manifest
+blib
+Makefile
+pm_to_blib
