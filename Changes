@@ -1,3 +1,4 @@
 $Id$
 
-0.9 -
+0.9 - Thu Oct 10 00:27:13 EDT 2002
+	+ removed as many dependencies as possible
