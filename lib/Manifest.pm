@@ -11,8 +11,7 @@ use Exporter;
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-#$VERSION = sprintf "%d.%02d", q$Revision$ =~ m/(\d+) . (\d+)/x;
-$VERSION = 0.91;
+$VERSION = 0.92;
 
 my $Manifest = "t/test_manifest";
 

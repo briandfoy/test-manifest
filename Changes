@@ -1,5 +1,10 @@
 $Id$
 
+0.92 - Wed Jul 30 14:10:00 2003
+        * Made tests run clean under warnings.
+	* Closed a file that failed when trying to delete it under
+	  Windows.  (Thanks Mike O'Regan)
+
 0.91 - Wed Dec 11 00:48:55 2002
 	* require ExtUtils::MakeMaker 6.x so the right run_tests is 
 	available

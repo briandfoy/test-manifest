@@ -27,6 +27,7 @@ while( <$in> )
 	chomp;
 	push @tests, $_;
 	}
+close $in;
 
 my $expected = join " ", map { "t/$_" } @tests;
 
