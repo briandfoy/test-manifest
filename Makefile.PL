@@ -3,18 +3,17 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile
         (
-        'NAME'     => 'Test::Manifest',
-        'VERSION'  => '0.7',
+        'NAME'          => 'Test::Manifest',
+        'VERSION_FROM'  => 'lib/Manifest.pm',
+        
 		'PREREQ_PM' => {
-			'File::Find::Rule' => '0',
-			'Test::Data'       => '0',
 			'Test::More'       => '0',
-			'Test::Pod'        => '0',
-			'Test::Prereq'     => '0',
-			'Text::Diff'       => '0',
 			},
+			
         'PM'       => 
         	{
             'lib/Manifest.pm'  => '$(INST_LIBDIR)/Manifest.pm',
             },
+            
+        clean => { FILES => 'Test-Manifest-* t/test_manifest' },
         );

@@ -1,12 +1,21 @@
 # $Id$
 use strict;
 
-use Test::More tests => 9;
+use Test::More tests => 7;
 
 use Test::Manifest qw(get_t_files manifest_name);
-use Test::Data qw(Scalar);
 
 my $test_manifest = manifest_name();
+
+open IN, 'test_manifest' or 
+	print "bail out! Could not open test_manifest\n$!\n";
+
+open OUT, "> $test_manifest" or 
+	print "bail out! Could not open $test_manifest\n$!\n";
+
+while( <IN> ) { print OUT }
+close IN;
+close OUT;
 
 my @tests = ();
 
@@ -39,9 +48,9 @@ local $SIG{__WARN__} = sub { 1 };
 
 my $string = get_t_files();
 
-undef_ok( $string );
+ok( ! $string );
 
 my @array = get_t_files();
 
-undef_ok( $string );
+ok( ! $string );
 }

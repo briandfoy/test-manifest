@@ -1,14 +1,18 @@
+# $Id$
 package Test::Manifest;
 use strict;
 
 use base qw(Exporter);
-use vars qw(@EXPORT_OK @EXPORT);
+use vars qw(@EXPORT_OK @EXPORT $VERSION);
 
 use Carp qw(carp);
 use Exporter;
 
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
+
+#$VERSION = sprintf "%d.%02d", q$Revision$ =~ m/(\d+) . (\d+)/x;
+$VERSION = 0.9;
 
 my $Manifest = "t/test_manifest";
 
@@ -18,9 +22,7 @@ Test::Manifest - interact with a t/test_manifest file
 
 =head1 SYNOPSIS
 
-use Test::Manifest qw(get_t_files);
-
-WriteMakefile( ..., test => { TESTS => get_t_files() } );
+See the functions section.
 
 =head1 DESCRIPTION
 
@@ -42,6 +44,21 @@ do the right thing.
 =over 4
 
 =item run_t_manifest
+
+Run all of the files in t/test_manifest through Test::Harness:runtests
+in the order they appear in the file.
+
+If you want to use this, in Makefile.PL you need to override some 
+MakeMaker magic (after you load ExtUtils::MakeMaker).
+
+	sub ExtUtils::MM_Any::test_via_harness
+		{
+		my($self, $perl, $tests) = @_;
+	
+		return qq|\t$perl "-MTest::Manifest" | .
+			   qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
+			   qq|'\$(INST_ARCHLIB)')"\n|;
+		}
 
 =cut
 
@@ -133,7 +150,17 @@ sub manifest_name
 	}
 	
 =back
+
+=head1 SOURCE AVAILABILITY
+
+This source is part of a SourceForge project which always has the
+latest sources in CVS, as well as all of the previous releases.
+
+	https://sourceforge.net/projects/brian-d-foy/
 	
+If, for some reason, I disappear from the world, one of the other
+members of the project can shepherd this module appropriately.
+
 =head1 AUTHOR
 
 brian d foy, E<lt>bdfoy@cpan.orgE<lt>
