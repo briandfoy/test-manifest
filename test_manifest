@@ -1,6 +1,7 @@
-# this is a comment
+# this is a comment, then a blank line
+
 0.load.t
 1.get_test_files.t
 1.make_test_manifest.t
- leading_space.t
-trailing_space.t    
+    leading_space.t
+trailing_space.t # comment at end of line

@@ -12,3 +12,4 @@ t/leading_space.t
 t/pod_coverage.t
 t/trailing_space.t
 test_manifest
+test_manifest_levels

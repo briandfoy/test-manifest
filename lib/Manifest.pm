@@ -6,8 +6,11 @@ use base qw(Exporter);
 use vars qw(@EXPORT_OK @EXPORT $VERSION);
 
 use Carp qw(carp);
-use File::Spec::Functions qw(catfile);
 use Exporter;
+use File::Spec::Functions qw(catfile);
+
+require Test::More;
+*diag = *Test::More::diag;
 
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
@@ -24,7 +27,7 @@ require 5.006;
 
 	return qq|\t$perl "-MTest::Manifest" | .
 		   qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
-		   qq|'\$(INST_ARCHLIB)')"\n|;
+		   qq|'\$(INST_ARCHLIB)', \$(TEST_LEVEL) )"\n|;
 	};
 
 =head1 NAME
@@ -62,11 +65,14 @@ leading and trailing whitespace from each line.  It also checks that
 the specified file is actually in the t/ directory.  If the file does
 not exist, it does not put its name in the list of test files to run.
 
+Optionally, you can add a number after the test name in test_manifest
+to define sets of tests. See get_t_files() for more information.
+
 =head2 Functions
 
 =over 4
 
-=item run_t_manifest()
+=item run_t_manifest( TEST_VERBOSE, INST_LIB, INST_ARCHLIB, TEST_LEVEL )
 
 Run all of the files in t/test_manifest through Test::Harness:runtests
 in the order they appear in the file.
@@ -83,32 +89,57 @@ sub run_t_manifest
 	$Test::Harness::verbose = shift;
 
 	local @INC = @INC;
-	unshift @INC, map { File::Spec->rel2abs($_) } @_;
+	unshift @INC, map { File::Spec->rel2abs($_) } @_[0,1];
 
-	my @files = get_t_files();
+	my( $level ) = $_[2] || ();
+	
+	print STDERR "Level is $level\n";
+	
+	my @files = get_t_files( $level );
 	print STDERR "Test::Manifest::test_harness found [@files]\n";
 
 	Test::Harness::runtests( @files );
 	}
 
-=item get_t_files()
+=item get_t_files( [LEVEL] )
 
 In scalar context it returns a single string that you can use directly
-in WriteMakefile().
-
-In list context it returns a list of the files it found in
-t/test_manifest.
+in WriteMakefile(). In list context it returns a list of the files it
+found in t/test_manifest.
 
 If a t/test_manifest file does not exist, get_t_files() returns
 nothing.
 
 get_t_files() warns you if it can't find t/test_manifest, or if
-entries start with "t/".
+entries start with "t/". It skips blank lines, and strips Perl
+style comments from the file.
+
+Each line in t/test_manifest can have three parts: the test name,
+the test level (a floating point number), and a comment. By default,
+the test level is 1.
+
+	test_name.t 2  #Run this only for level 2 testing
+	
+Without an argument, get_t_files() returns all the test files it
+finds. With an argument that is true (so you can't use 0 as a level)
+and is a number, it skips tests with a level greater than that
+argument. You can then define sets of tests and choose a set to
+run. For instance, you might create a set for end users, but also
+add on a set for deeper testing for developers.
+
+To select sets of tests, specify the level in the variable TEST_LEVEL
+during `make test`. 
+
+	make test # run all tests no matter the level
+	make test TEST_LEVEL=2  # run all tests level 2 and below
 
 =cut
 
-sub get_t_files()
+sub get_t_files
 	{
+	my $upper_bound = shift;
+	diag( "Test level is $upper_bound\n" ) if $Test::Harness::verbose;
+	
 	carp( "$Manifest does not exist!" ) unless -e $Manifest;
 	return unless open my( $fh ), $Manifest;
 
@@ -117,10 +148,21 @@ sub get_t_files()
 	while( <$fh> )
 		{
 		chomp;
+		s/#.*//;
 		s/^\s+|\s+$//g;
-		next if m/^#/;
-		carp( "test file begins with t/ [$_]" ) if m|^t/|;
-		push @tests, catfile( "t", $_ ) if -e catfile( "t", $_ );
+		next unless $_;
+		my( $test, $level ) = split /\s+/, $_, 2;
+		
+		$level = 1 unless defined $level;
+		
+		next if( $upper_bound and $level > $upper_bound );
+		
+		carp( "Bad value for test [$test] level [$level]\n".
+			"Level should be a floating-point number\n" )
+			unless $level =~ m/^\d+(?:.\d+)?$/;
+		carp( "test file begins with t/ [$test]" ) if m|^t/|;
+		
+		push @tests, catfile( "t", $test ) if -e catfile( "t", $test );
 		}
 	close $fh;
 

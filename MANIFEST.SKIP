@@ -9,7 +9,9 @@ CVS
 Makefile.old
 MANIFEST.SKIP
 MANIFEST.bak
+.ts$
 pm_to_blib
+blibdir
 Makefile$
 ~$
 .rej$
