@@ -1,23 +1,17 @@
 # $Id$
-BEGIN { $| = 1; print "1..2\n"; }
-END   {print "not ok\n" unless $loaded;}
+BEGIN {
+	use File::Find::Rule;
+	@classes = map { my $x = $_;
+		$x =~ s|^blib/lib/||;
+		$x =~ s|/|::|g;
+		$x =~ s|\.pm$||;
+		$x;
+		} File::Find::Rule->file()->name( '*.pm' )->in( 'blib/lib' );
+	}
 
-# Test it loads
-use Test::Manifest;
-$loaded = 1;
-print "ok\n";
-
-my $test_manifest = 'test_manifest';
-
-eval {
-	die "cannot open $test_manifest! $!"
-		unless open my $in, $test_manifest;
-		
-	die "cannot open $test_manifest! $!"
-		unless open my $out, "> t/$test_manifest";
-		
-	while( <$in> ) { print $out $_ };
-	};
-print STDERR $@ if $@;
-print $@ ? 'not ' : '', "ok\n";
+use Test::More tests => scalar @classes;
 	
+foreach my $class ( @classes )
+	{
+	use_ok( $class );
+	}
