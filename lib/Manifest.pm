@@ -11,7 +11,7 @@ use Exporter;
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = 0.92;
+$VERSION = 0.93;
 
 my $Manifest = "t/test_manifest";
 
@@ -51,15 +51,20 @@ putting something like this directly in Makefile.PL so it does not
 depend on anything else.  A Makefile.PL with dependencies is a big
 headache.
 
-	sub ExtUtils::MM_Any::test_via_harness
-		{
-		my($self, $perl, $tests) = @_;
+	eval "use Test::Manifest";
 	
-		return qq|\t$perl "-MTest::Manifest" | .
-			   qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
-			   qq|'\$(INST_ARCHLIB)')"\n|;
+	unless( $@ )
+		{
+		* ExtUtils::MM_Any::test_via_harness = sub
+			{
+			my($self, $perl, $tests) = @_;
+		
+			return qq|\t$perl "-MTest::Manifest" | .
+				   qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
+				   qq|'\$(INST_ARCHLIB)')"\n|;
+			}
 		}
-
+		
 =cut
 
 sub run_t_manifest 
@@ -97,7 +102,7 @@ entries start with "t/".
 sub get_t_files()
 	{
 	carp( "$Manifest does not exist!" ) unless -e $Manifest;
-	return unless open( my $fh, $Manifest );
+	return unless open my( $fh ), $Manifest;
 	
 	my @tests = ();
 	
@@ -126,7 +131,7 @@ TO DO: specify files to skip.
 sub make_test_manifest()
 	{
 	carp( "t/ directory does not exist!" ) unless -d "t";
-	return unless open( my $fh, "> $Manifest" );
+	return unless open my( $fh ), "> $Manifest";
 	
 	my $count = 0;
 	while( my $file = glob("t/*.t") )
@@ -156,7 +161,7 @@ sub manifest_name
 This source is part of a SourceForge project which always has the
 latest sources in CVS, as well as all of the previous releases.
 
-	https://sourceforge.net/projects/brian-d-foy/
+	http://sourceforge.net/projects/brian-d-foy/
 	
 If, for some reason, I disappear from the world, one of the other
 members of the project can shepherd this module appropriately.
