@@ -6,16 +6,32 @@ use base qw(Exporter);
 use vars qw(@EXPORT_OK @EXPORT $VERSION);
 
 use Carp qw(carp);
+use File::Spec::Functions qw(catfile);
 use Exporter;
 
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = 0.95;
+$VERSION = sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
 
-my $Manifest = "t/test_manifest";
+my $Manifest = catfile( "t", "test_manifest" );
 
 require 5.006;
+
+use ExtUtils::MM_Any;
+
+{
+local $^W = 0;
+
+* ExtUtils::MM_Any::test_via_harness = sub
+	{
+	my($self, $perl, $tests) = @_;
+
+	return qq|\t$perl "-MTest::Manifest" | .
+		   qq|"-e" "run_t_manifest(\$(TEST_VERBOSE), '\$(INST_LIB)', | .
+		   qq|'\$(INST_ARCHLIB)')"\n|;
+	}
+}
 
 =head1 NAME
 
@@ -23,26 +39,41 @@ Test::Manifest - interact with a t/test_manifest file
 
 =head1 SYNOPSIS
 
-See the functions section.
+	# in Makefile.PL
+	eval "use Test::Manifest";
 
+	# in the file t/test_manifest, list the tests you want 
+	# to run
+	
 =head1 DESCRIPTION
 
-MakeMaker assumes that you want to run all of the .t files
+Test::Harness assumes that you want to run all of the .t files
 in the t/ directory in ascii-betical order during C<make test>
 unless you say otherwise.  This leads to some interesting
 naming schemes for test files to get them in the desired order.
+This interesting names ossify when they get into source control,
+and get even more interesting as more tests show up.
 
-You can specify any order or any files that you like, though,
-with the C<test> directive to WriteMakefile.
+Test::Manifest overrides the default behaviour by replacing the
+test_via_harness target in the Makefiel.  Instead of running at the
+t/*.t files in ascii-betical order, it looks in the t/test_manifest file
+to find out which tests you want to run and the order in which you want
+to run them.  It constructs the right value for MakeMaker to do the
+right thing.
 
-Test::Manifest looks in the t/test_manifest file to find out
-which tests you want to run and the order in which you want
-to run them.  It constructs the right value for MakeMaker to
-do the right thing.
+In t/test_manifest, simply list the tests that you want to run.  Their
+order in the file is the order in which they run.  You can comment
+lines with a #, just like in Perl, and Test::Manifest will strip
+leading and trailing whitespace from each line.  It also checks that
+the specified file is actually in the t/ directory.  If the file
+does not exist, it does not put its name in the list of test
+files to run.
 
-=head1 FUNCTIONS
+=head2 Functions
 
-=head2 C<run_t_manifest()>
+=over 4
+
+=item run_t_manifest()
 
 Run all of the files in t/test_manifest through Test::Harness:runtests
 in the order they appear in the file.
@@ -85,7 +116,7 @@ sub run_t_manifest
 	Test::Harness::runtests( @files );
 	}
 
-=head2 C<get_t_files()>
+=item get_t_files()
 
 In scalar context it returns a single string that you can use directly
 in WriteMakefile().
@@ -114,14 +145,14 @@ sub get_t_files()
 		s/^\s+|\s+$//g;
 		next if m/^#/;
 		carp( "test file begins with t/ [$_]" ) if m|^t/|;
-		push @tests, "t/$_" if -e "t/$_";
+		push @tests, catfile( "t", $_ ) if -e catfile( "t", $_ );
 		}
 	close $fh;
 
 	return wantarray ? @tests : join " ", @tests;
 	}
 
-=head2 C<make_test_manifest()>
+=item make_test_manifest()
 
 Creates the test_manifest file in the t directory by reading
 the contents of the t directory.
@@ -149,7 +180,7 @@ sub make_test_manifest()
 	return $count;
 	}
 
-=head2 C<manifest_name()>
+=item manifest_name()
 
 Returns the name of the test manifest file, relative to t/
 
@@ -159,6 +190,8 @@ sub manifest_name
 	{
 	return $Manifest;
 	}
+
+=back
 
 =head1 SOURCE AVAILABILITY
 
@@ -172,7 +205,7 @@ members of the project can shepherd this module appropriately.
 
 =head1 AUTHOR
 
-C<brian d foy>, E<lt>bdfoy@cpan.orgE<gt>
+brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT
 
