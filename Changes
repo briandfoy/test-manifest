@@ -1,5 +1,14 @@
 $Id$
 
+1.13 - Sat Mar 19 12:36:04 2005
+	* Added POD Coverage tests
+	* No more fooling with ExtUtils::* ---> put things in MY::* to
+	change behavior.
+	* If you are using Test::Manifest, you should upgrade and adjust
+	your Makefile.PL: the magic happens when Test::Manifest loads, so
+	you only need to load it.  Ensure you require the right version:
+		eval "use Test::Manifest 1.13";
+
 1.11 - Sat Sep 25 18:43:38 2004
 	* This is a release version.  It's the same code as 0.95
 	* Some doc updates
