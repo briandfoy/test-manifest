@@ -40,9 +40,7 @@ do the right thing.
 
 =head1 FUNCTIONS
 
-=over 4
-
-=item run_t_manifest
+=head2 C<run_t_manifest()>
 
 Run all of the files in t/test_manifest through Test::Harness:runtests
 in the order they appear in the file.
@@ -66,21 +64,21 @@ headache.
 
 sub run_t_manifest 
 	{
-    require Test::Harness;
-    require File::Spec;
+	require Test::Harness;
+	require File::Spec;
 
-    $Test::Harness::verbose = shift;
+	$Test::Harness::verbose = shift;
 
-    local @INC = @INC;
-    unshift @INC, map { File::Spec->rel2abs($_) } @_;
+	local @INC = @INC;
+	unshift @INC, map { File::Spec->rel2abs($_) } @_;
 
 	my @files = get_t_files();
 	print STDERR "Test::Manifest::test_harness found [@files]\n";
 	
-    Test::Harness::runtests( @files );
+	Test::Harness::runtests( @files );
 	}
 
-=item get_t_files()
+=head2 C<get_t_files()>
 
 In scalar context it returns a single string that you can use directly
 in WriteMakefile().
@@ -114,7 +112,7 @@ sub get_t_files()
 	return wantarray ? @tests : join " ", @tests;
 	}
 
-=item make_test_manifest()
+=head2 C<make_test_manifest()>
 
 Creates the test_manifest file in the t directory by reading
 the contents of the t directory.
@@ -142,7 +140,7 @@ sub make_test_manifest()
 	return $count;
 	}
 
-=item manifest_name
+=head2 C<manifest_name()>
 
 Returns the name of the test manifest file, relative to t/
 
@@ -153,8 +151,6 @@ sub manifest_name
 	return $Manifest;
 	}
 	
-=back
-
 =head1 SOURCE AVAILABILITY
 
 This source is part of a SourceForge project which always has the
@@ -167,11 +163,11 @@ members of the project can shepherd this module appropriately.
 
 =head1 AUTHOR
 
-brian d foy, E<lt>bdfoy@cpan.orgE<lt>
+C<brian d foy>, E<lt>bdfoy@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2002, brian d foy, All Rights Reserved
+Copyright 2002, C<brian d foy>, All Rights Reserved
 
 You may use and distribute this module under the same terms
 as Perl itself
