@@ -1,3 +1,4 @@
 Test-Manifest-*
 .lwpcookies
 .DS_Store
+t/test_manifest
