@@ -15,6 +15,8 @@ $VERSION = 0.95;
 
 my $Manifest = "t/test_manifest";
 
+require 5.006;
+
 =head1 NAME
 
 Test::Manifest - interact with a t/test_manifest file
