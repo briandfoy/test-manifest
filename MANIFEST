@@ -9,5 +9,6 @@ t/1.get_test_files.t
 t/1.make_test_manifest.t
 t/99.pod.t
 t/leading_space.t
+t/pod_coverage.t
 t/trailing_space.t
 test_manifest
