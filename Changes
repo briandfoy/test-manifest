@@ -1,5 +1,15 @@
 $Id$
 
+1.16 - Tue Aug 29 17:43:16 2006
+	* Added an experimental feature to grab file names from additional
+	files. Just specify which other files to grab file names from:
+
+	;include names_in_this_file.txt
+
+	See the docs for get_t_files().
+
+	* This is an experimental feature. This feature is experimental.
+
 1.14 - Sat Mar 26 20:55:45 2005
 	* put paths together with File::Spec (so this should work on
 	Windows
