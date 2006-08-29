@@ -129,6 +129,14 @@ argument. You can then define sets of tests and choose a set to
 run. For instance, you might create a set for end users, but also
 add on a set for deeper testing for developers.
 
+Experimentally, you can include a command to grab test names from 
+another file. The command starts with a C<;> to distinguish it
+from a true filename. The filename (currently) is relative to the
+current working directory, unlike the filenames, which are relative
+to C<t/>. The filenames in the included are still relative to C<t/>.
+
+	;include t/file_with_other_test_names.txt
+	
 To select sets of tests, specify the level in the variable TEST_LEVEL
 during `make test`. 
 
@@ -274,6 +282,11 @@ latest sources in CVS, as well as all of the previous releases.
 
 If, for some reason, I disappear from the world, one of the other
 members of the project can shepherd this module appropriately.
+
+=head1 CREDITS
+
+Matt Vanderpol suggested and supplied a patch for the ;include
+feature.
 
 =head1 AUTHOR
 
