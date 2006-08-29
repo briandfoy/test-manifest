@@ -15,9 +15,11 @@ require Test::More;
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
+$VERSION = sprintf "%d.%02d_01", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
 
 my $Manifest = catfile( "t", "test_manifest" );
+my %SeenInclude = ();
+my %SeenTest = ();
 
 require 5.006;
 
@@ -140,19 +142,41 @@ sub get_t_files
 	my $upper_bound = shift;
 	diag( "Test level is $upper_bound\n" ) if $Test::Harness::verbose;
 	
-	carp( "$Manifest does not exist!" ) unless -e $Manifest;
-	return unless open my( $fh ), $Manifest;
+	%SeenInclude = ();
+	%SeenTest    = ();
 
+	carp( "$Manifest does not exist!" ) unless -e $Manifest;
+	my $result = _load_test_manifest($Manifest, $upper_bound);
+	return unless defined $result;
+	my @tests = @{$result};
+	
+	return wantarray ? @tests : join " ", @tests;
+	}
+
+# Wrapper for loading test manifest files to support including other files
+sub _load_test_manifest
+	{
+	my $manifest = shift;
+	return unless open my( $fh ), $manifest;
+
+	my $upper_bound = shift || 0;
 	my @tests = ();
 
 	while( <$fh> )
 		{
-		chomp;
-		s/#.*//;
-		s/^\s+|\s+$//g;
+		s/#.*//; s/^\s+//; s/\s+$//;
+
 		next unless $_;
-		my( $test, $level ) = split /\s+/, $_, 2;
-		
+
+		my( $command, $arg ) = split/\s+/, $_, 2;
+		if( $command eq ';include' ) 
+			{
+			my $result = _include_file( $arg, $., $upper_bound );
+			push @tests, @$result if defined $result;
+			next;
+			}
+
+		my( $test, $level ) = ( $command, $arg );
 		$level = 1 unless defined $level;
 		
 		next if( $upper_bound and $level > $upper_bound );
@@ -162,13 +186,44 @@ sub get_t_files
 			unless $level =~ m/^\d+(?:.\d+)?$/;
 		carp( "test file begins with t/ [$test]" ) if m|^t/|;
 		
-		push @tests, catfile( "t", $test ) if -e catfile( "t", $test );
-		}
-	close $fh;
+		$test = catfile( "t", $test ) if -e catfile( "t", $test );
+		# Make sure we don't include a test we've already seen
+		next if exists $SeenTest{$test};
 
-	return wantarray ? @tests : join " ", @tests;
+		$SeenTest{$test} = 1;
+		push @tests, $test;
+		}
+
+	close $fh;
+	return \@tests;
 	}
 
+sub _include_file
+	{
+	my( $file, $line, $upper_bound ) = @_;
+	diag( "Including file $file at line $line\n" ) if $Test::Harness::verbose;
+	
+	unless( -e $file )
+		{
+		carp( "$file does not exist" ) ;
+		return;
+		}
+	
+	if( exists $SeenInclude{$file} )
+		{
+		carp( "$file already loaded - skipping" ) ;
+		return;
+		}
+
+	$SeenInclude{$file} = $line;
+
+	my $result = _load_test_manifest( $file, $upper_bound );
+	return unless defined $result;
+	
+	$result;
+	}
+	
+	
 =item make_test_manifest()
 
 Creates the test_manifest file in the t directory by reading
@@ -226,7 +281,7 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT
 
-Copyright 2002-2004, brian d foy, All Rights Reserved
+Copyright 2002-2006, brian d foy, All Rights Reserved
 
 You may use and distribute this module under the same terms
 as Perl itself
