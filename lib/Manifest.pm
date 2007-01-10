@@ -15,7 +15,7 @@ require Test::More;
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = sprintf "%d.%02d_01", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
+$VERSION = sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
 
 my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();
@@ -23,7 +23,7 @@ my %SeenTest = ();
 
 require 5.006;
 
-*MY::test_via_harness = sub
+sub MY::test_via_harness
 	{
 	my($self, $perl, $tests) = @_;
 
@@ -292,13 +292,14 @@ feature.
 
 brian d foy, C<< <bdfoy@cpan.org> >>
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
-Copyright 2002-2006, brian d foy, All Rights Reserved
+Copyright (c) 2002-2007 brian d foy.  All rights reserved.
 
-You may use and distribute this module under the same terms
-as Perl itself
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 =cut
+
 
 1;
