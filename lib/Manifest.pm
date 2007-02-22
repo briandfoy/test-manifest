@@ -15,7 +15,7 @@ require Test::More;
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
+$VERSION = 1.17; #sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
 
 my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();

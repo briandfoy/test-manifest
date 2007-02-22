@@ -8,6 +8,7 @@ WriteMakefile
 	'NAME'          => 'Test::Manifest',
 	'VERSION_FROM'  => 'lib/Manifest.pm',
 	'LICENSE'       => 'perl',
+	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
 	
 	'PREREQ_PM' => {
 		'Test::More'          => '0',
