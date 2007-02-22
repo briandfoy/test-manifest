@@ -1,0 +1,6 @@
+*.old
+Test-*
+pm_to_blib
+Makefile
+blib
+*.gz
