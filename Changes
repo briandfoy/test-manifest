@@ -1,5 +1,8 @@
 $Id$
 
+1.21 - Wed Sep 19 19:45:27 2007
+	* [BUGFIX] getting rid of Test::More
+
 1.17 - Thu Feb 22 13:20:23 2007
 	* Updated to Sourceforge's SVN repository
 	* Dist conforms to META 1.2 spec
