@@ -6,16 +6,12 @@ use base qw(Exporter);
 use vars qw(@EXPORT_OK @EXPORT $VERSION);
 
 use Carp qw(carp);
-use Exporter;
 use File::Spec::Functions qw(catfile);
-
-require Test::More;
-*diag = *Test::More::diag;
 
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = 1.17; #sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
+$VERSION = 1.21; #sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
 
 my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();
@@ -136,7 +132,17 @@ current working directory, unlike the filenames, which are relative
 to C<t/>. The filenames in the included are still relative to C<t/>.
 
 	;include t/file_with_other_test_names.txt
-	
+
+Also experimentally, you can stop Test::Manifest from reading filenames
+with the C<;skip> directive. Test::Harness will skip the filenames up to
+the C<;unskip> directive (or end of file)
+
+	run_this1
+	;skip
+	skip_this
+	;unskip
+	run_this2
+
 To select sets of tests, specify the level in the variable TEST_LEVEL
 during `make test`. 
 
@@ -148,7 +154,7 @@ during `make test`.
 sub get_t_files
 	{
 	my $upper_bound = shift;
-	diag( "Test level is $upper_bound\n" ) if $Test::Harness::verbose;
+	print STDERR ( "# Test level is $upper_bound\n" ) if $Test::Harness::verbose;
 	
 	%SeenInclude = ();
 	%SeenTest    = ();
@@ -170,20 +176,32 @@ sub _load_test_manifest
 	my $upper_bound = shift || 0;
 	my @tests = ();
 
-	while( <$fh> )
+	LINE: while( <$fh> )
 		{
 		s/#.*//; s/^\s+//; s/\s+$//;
 
 		next unless $_;
 
 		my( $command, $arg ) = split/\s+/, $_, 2;
-		if( $command eq ';include' ) 
+		if( ';' eq substr( $command, 0, 1 ) )
 			{
-			my $result = _include_file( $arg, $., $upper_bound );
-			push @tests, @$result if defined $result;
-			next;
+			if( $command eq ';include' ) 
+				{
+				my $result = _include_file( $arg, $., $upper_bound );
+				push @tests, @$result if defined $result;
+				next;
+				}
+			elsif( $command eq ';skip' ) 
+				{
+				while( <$fh> ) { last if m/^;unskip/ }
+				next LINE;
+				}
+			else
+				{
+				croak( "Unknown directive: $command" );
+				}
 			}
-
+			
 		my( $test, $level ) = ( $command, $arg );
 		$level = 1 unless defined $level;
 		
@@ -209,7 +227,7 @@ sub _load_test_manifest
 sub _include_file
 	{
 	my( $file, $line, $upper_bound ) = @_;
-	diag( "Including file $file at line $line\n" ) if $Test::Harness::verbose;
+	print STDERR ( "# Including file $file at line $line\n" ) if $Test::Harness::verbose;
 	
 	unless( -e $file )
 		{
