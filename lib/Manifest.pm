@@ -11,7 +11,7 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = 1.21; #sprintf "%d.%02d", q$Revision$ =~ m/ (\d+) \. (\d+) /x;
+$VERSION = 1.22;
 
 my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();

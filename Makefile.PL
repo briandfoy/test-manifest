@@ -6,6 +6,7 @@ require 5.006;
 WriteMakefile
 	(
 	'NAME'          => 'Test::Manifest',
+	'ABSTRACT'      => 'interact with a t/test_manifest file',
 	'VERSION_FROM'  => 'lib/Manifest.pm',
 	'LICENSE'       => 'perl',
 	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
