@@ -18,3 +18,4 @@ Makefile$
 t/test_manifest
 .bak$
 .old$
+.svn

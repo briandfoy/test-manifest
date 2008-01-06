@@ -12,7 +12,7 @@ copy( 'test_manifest', manifest_name() );
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 my $expected = join " ", map { File::Spec->catfile( "t", $_ ) } qw(
-		0.load.t 1.get_test_files.t 1.make_test_manifest.t
+		00load.t 01get_test_files.t 01make_test_manifest.t
 		leading_space.t trailing_space.t
 		);
 
@@ -53,13 +53,13 @@ local $Test::Harness::verbose = 1;
 copy( 'test_manifest_levels', manifest_name() );
 
 my @expected = ( [] );
-$expected[1] = [ qw( 0.load.t 1.get_test_files.t pod_coverage.t) ];
-$expected[2] = [ qw( 0.load.t 1.get_test_files.t 1.make_test_manifest.t 
+$expected[1] = [ qw( 00load.t 01get_test_files.t pod_coverage.t) ];
+$expected[2] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t 
 	pod_coverage.t ) ];
-$expected[3] = [ qw( 0.load.t 1.get_test_files.t 1.make_test_manifest.t 
+$expected[3] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t 
 	leading_space.t pod_coverage.t trailing_space.t ) ];
-$expected[0] = [ qw( 0.load.t 1.get_test_files.t 1.make_test_manifest.t 
-	leading_space.t pod_coverage.t trailing_space.t 99.pod.t ) ];
+$expected[0] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t 
+	leading_space.t pod_coverage.t trailing_space.t 99pod.t ) ];
 	
 foreach my $level ( 0 .. 3 )
 	{

@@ -17,9 +17,9 @@ copy( 'test_manifest_with_include', manifest_name() );
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 my @expected_tests = map { File::Spec->catfile( "t", $_ ) } qw(
-	0.load.t 
-	99.pod.t
-	1.get_test_files.t
+	01load.t 
+	99pod.t
+	01get_test_files.t
 	);
 	
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

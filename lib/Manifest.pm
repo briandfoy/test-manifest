@@ -11,7 +11,7 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = 1.22;
+$VERSION = '1.22_01';
 
 my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();
@@ -91,10 +91,12 @@ sub run_t_manifest
 
 	my( $level ) = $_[2] || ();
 	
-	print STDERR "Level is $level\n";
+	print STDERR "Level is $level\n" 
+		if $Test::Harness::verbose;
 	
 	my @files = get_t_files( $level );
-	print STDERR "Test::Manifest::test_harness found [@files]\n";
+	print STDERR "Test::Manifest::test_harness found [@files]\n" 
+		if $Test::Harness::verbose;
 
 	Test::Harness::runtests( @files );
 	}
@@ -154,7 +156,8 @@ during `make test`.
 sub get_t_files
 	{
 	my $upper_bound = shift;
-	print STDERR ( "# Test level is $upper_bound\n" ) if $Test::Harness::verbose;
+	print STDERR "# Test level is $upper_bound\n"
+		if $Test::Harness::verbose;
 	
 	%SeenInclude = ();
 	%SeenTest    = ();
@@ -227,7 +230,8 @@ sub _load_test_manifest
 sub _include_file
 	{
 	my( $file, $line, $upper_bound ) = @_;
-	print STDERR ( "# Including file $file at line $line\n" ) if $Test::Harness::verbose;
+	print STDERR "# Including file $file at line $line\n" 
+		if $Test::Harness::verbose;
 	
 	unless( -e $file )
 		{
@@ -312,7 +316,7 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2007 brian d foy.  All rights reserved.
+Copyright (c) 2002-2008 brian d foy.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
