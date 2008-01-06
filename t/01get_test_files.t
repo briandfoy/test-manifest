@@ -70,14 +70,3 @@ foreach my $level ( 0 .. 3 )
 	}
 
 }
-
-__END__
-# this is a comment, then a blank line
-
-0.load.t
-1.get_test_files.t 1 
-1.make_test_manifest.t 2
-leading_space.t 2.9
-pod_coverage.t 1 # with a comment
-trailing_space.t 3 # with a comment
-99.pod.t	3.1  
