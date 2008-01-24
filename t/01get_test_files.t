@@ -34,9 +34,18 @@ foreach my $i ( 0 .. $#array )
 {
 local $SIG{__WARN__} = sub { 1 };
 
-( unlink manifest_name() ) ? 
-	pass( "test_manifest unlinked") : 
-	fail( "test_manifest still around after unlink!");
+if( $^O eq 'VMS' ) 	# http://perldoc.perl.org/perlvms.html#unlink-LIST
+	{
+	1 while ( unlink manifest_name() );
+	} 
+else 
+	{
+	unlink manifest_name();
+	}
+
+-e manifest_name() ? 
+	fail( "test_manifest still around after unlink!") :
+	pass( "test_manifest unlinked") ;
 
 my $string = get_t_files();
 

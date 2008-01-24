@@ -2,6 +2,9 @@
 package Test::Manifest;
 use strict;
 
+use warnings;
+no warnings;
+
 use base qw(Exporter);
 use vars qw(@EXPORT_OK @EXPORT $VERSION);
 
@@ -11,7 +14,7 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '1.22_01';
+$VERSION = '1.22_02';
 
 my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();
