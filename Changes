@@ -1,5 +1,8 @@
 $Id$
 
+1.22_02 - Thu Jan 24 06:13:13 2008
+	* File path and unlink fixes for VMS (RT #32061). Let's see if this works.
+
 1.22_01 - Sun Jan  6 14:18:46 2008
 	* Changed test file names to only have one dot in them so they
 	work on VMS and ODS-2 file systems: RT #32061
