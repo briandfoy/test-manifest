@@ -1,5 +1,11 @@
 $Id$
 
+1.22_03 - Tue Jul 29 21:14:49 2008
+	* Fixed bug for missing file: previously the missing file
+	name was passed through to run_t_files, although without
+	the t/ added to its path. Test::Manifest should only
+	warn about and skip missing files.
+
 1.22_02 - Thu Jan 24 06:13:13 2008
 	* File path and unlink fixes for VMS (RT #32061). Let's see if this works.
 
