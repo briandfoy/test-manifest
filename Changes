@@ -4,6 +4,9 @@
 	the t/ added to its path. Test::Manifest should only
 	warn about and skip missing files.
 
+1.23 - Fri Jul 17 03:04:38 2009
+	* Move everything to git and finally make a release
+
 1.22_02 - Thu Jan 24 06:13:13 2008
 	* File path and unlink fixes for VMS (RT #32061). Let's see if this works.
 
