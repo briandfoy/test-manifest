@@ -1,4 +1,3 @@
-# $Id$
 package Test::Manifest;
 use strict;
 
@@ -14,7 +13,7 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '1.22_03';
+$VERSION = '1.23';
 
 my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();
@@ -93,8 +92,11 @@ sub run_t_manifest
 	local @INC = @INC;
 	unshift @INC, map { File::Spec->rel2abs($_) } @_[0,1];
 
-	my( $level ) = $_[2] || ();
+	my( $level ) = $_[2] || 0;
 	
+	print STDERR "Test::Manifest $VERSION\n"
+		if $Test::Harness::verbose;
+		
 	print STDERR "Level is $level\n" 
 		if $Test::Harness::verbose;
 	
@@ -308,13 +310,9 @@ sub manifest_name
 
 =head1 SOURCE AVAILABILITY
 
-This source is part of a SourceForge project which always has the
-latest sources in CVS, as well as all of the previous releases.
+This source is in Github:
 
-	http://sourceforge.net/projects/brian-d-foy/
-
-If, for some reason, I disappear from the world, one of the other
-members of the project can shepherd this module appropriately.
+	http://github.com/briandfoy/Test-Manifest/tree/master
 
 =head1 CREDITS
 
@@ -327,7 +325,7 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2008 brian d foy.  All rights reserved.
+Copyright (c) 2002-2009 brian d foy.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

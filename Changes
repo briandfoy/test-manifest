@@ -1,5 +1,3 @@
-$Id$
-
 1.22_03 - Tue Jul 29 21:14:49 2008
 	* Fixed bug for missing file: previously the missing file
 	name was passed through to run_t_files, although without
