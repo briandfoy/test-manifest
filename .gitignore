@@ -4,3 +4,4 @@ Makefile
 Test-*
 *.old
 t/test_manifest
+*.bak
