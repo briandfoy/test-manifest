@@ -13,9 +13,8 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '1.23';
+$VERSION = '2.00';
 
-my $Manifest = catfile( "t", "test_manifest" );
 my %SeenInclude = ();
 my %SeenTest = ();
 
@@ -37,26 +36,37 @@ Test::Manifest - interact with a t/test_manifest file
 =head1 SYNOPSIS
 
 	# in Makefile.PL
-	eval "use Test::Manifest";
+	eval "use Test::Manifest 2.00";
+
+	# in Build.PL
+	my $class = do {
+		if( eval "Test::Manifest 2.00" ) {
+			Test::Manifest->module_build_subclass;
+			}
+		else {
+			'Module::Build';
+			}
+		};
+	
+	my $build = $class->new( ... )
 
 	# in the file t/test_manifest, list the tests you want 
 	# to run
 	
 =head1 DESCRIPTION
 
-C<Test::Harness> assumes that you want to run all of the F<.t> files in the
-F<t/> directory in ascii-betical order during C<make test> unless you say
-otherwise.  This leads to some interesting naming schemes for test
-files to get them in the desired order. This interesting names ossify
-when they get into source control, and get even more interesting as
-more tests show up.
+C<Test::Harness> assumes that you want to run all of the F<.t> files
+in the F<t/> directory in ASCII-betical order during C<make test> or
+C<./Build test> unless you say otherwise.  This leads to some
+interesting naming schemes for test files to get them in the desired
+order. This interesting names ossify when they get into source
+control, and get even more interesting as more tests show up.
 
-C<Test::Manifest> overrides the default behaviour by replacing the
-test_via_harness target in the Makefile.  Instead of running at the
-F<t/*.t> files in ascii-betical order, it looks in the F<t/test_manifest>
+C<Test::Manifest> overrides the default test file order. Instead of running all of the
+F<t/*.t> files in ASCII-betical order, it looks in the F<t/test_manifest>
 file to find out which tests you want to run and the order in which
-you want to run them.  It constructs the right value for MakeMaker to
-do the right thing.
+you want to run them.  It constructs the right value for the build system to
+do the right thing. 
 
 In F<t/test_manifest>, simply list the tests that you want to run.  Their
 order in the file is the order in which they run.  You can comment
@@ -69,14 +79,129 @@ it will issue a warning.
 Optionally, you can add a number after the test name in test_manifest
 to define sets of tests. See C<get_t_files> for more information.
 
+=head2 ExtUtils::Makemaker
+
+To override the test order behaviour in C<Makemaker>, C<Test::Manifest>
+inserts itself in the C<test_via_harness> step by providing its own
+test runner. In C<Makefile.PL>, all you have to do is load C<Test::Manifest>
+before you call C<WriteMakefile>. To make it optional, load it in an eval:
+
+	eval "use Test::Manifest;
+
+=head2 Module::Build
+
+Overiding parts of C<Module::Build> is tricker if you want to use the 
+subclassing mechanism and still make C<Test::Manifest> optional. If you
+can load C<Test::Manifest> (version 2.00 or later), C<Test::Manifest> can
+create the subclass for you. 
+
+	my $class = do {
+		if( eval 'Test::Manifest 2.00; 1' ) {
+			Test::Manifest->get_module_build_subclass;
+			}
+		else {
+			'Module::Build' # if Test::Manifest isn't there
+			}
+		};
+		
+	$class->new( ... );
+	$class->create_build_file;
+
+This is a bit of a problem when you already have your own subclass.
+C<Test::Manifest> overrides C<find_test_files>, so you can get just
+that code to add to your own subclass code string:
+
+	my $code = eval 'Test::Manifest 2.00; 1'
+			? 
+		Test::Manifest->get_module_build_code_string
+			:
+		'';
+		
+	my $class = Module::Build->subclass(
+		...,
+		code => "$code\n...your subclass code string...",
+		);
+
+=head2 Class methods
+
+=over 4
+
+=item get_module_build_subclass
+
+For C<Module::Build> only.
+
+Returns a C<Module::Build> subclass that overrides C<find_test_files>. If
+you want to have your own C<Module::Build> subclass and still use 
+C<Test::Manifest>, you can get just the code string with 
+C<get_module_build_code_string>.
+
+=cut
+
+sub get_module_build_subclass
+	{
+	my( $class ) = @_;
+
+	
+	require Module::Build;
+
+	my $class = Module::Build->subclass(
+     	class => 'Test::Manifest::MB',
+
+		code  => $class->get_module_build_code_string,
+    	);
+
+	$class->log_info( "Using Test::Manifest $VERSION\n" );
+	
+	$class;
+	}
+
+=item get_module_build_code_string
+
+For C<Module::Build> only.
+
+Returns the overridden C<find_test_files> as Perl code in a string suitable
+for the C<code> key in C<Module::Build->subclass()>. You can add this to other 
+bits you are overriding or extending.
+
+See C<Module::Build::Base::find_test_files> to see the base implementation.
+
+=cut
+
+sub get_module_build_code_string
+	{
+	 q{
+	 sub find_test_files {
+	 	my $self = shift;
+	 	my $p = $self->{properties};
+	 	
+	 	my( $level ) = grep { defined } (
+	 		$ENV{TEST_LEVEL},
+	 		$p->{ 'testlevel' },
+	 		0
+	 		);
+	 	
+	 	$self->log_verbose( "Test level is $level\n" );
+	 	
+		require Test::Manifest;
+		my @files = Test::Manifest::get_t_files( $level );
+		\@files;
+		}
+	}
+	}
+	
+=back
+
 =head2 Functions
 
 =over 4
 
 =item run_t_manifest( TEST_VERBOSE, INST_LIB, INST_ARCHLIB, TEST_LEVEL )
 
-Run all of the files in t/test_manifest through Test::Harness:runtests
-in the order they appear in the file.
+For C<Makemaker> only. You don't have to mess with this at the user
+level.
+
+Run all of the files in F<t/test_manifest> through C<Test::Harness:runtests>
+in the order they appear in the file. This is inserted automatically
 
 	eval "use Test::Manifest";
 
@@ -110,23 +235,23 @@ sub run_t_manifest
 =item get_t_files( [LEVEL] )
 
 In scalar context it returns a single string that you can use directly
-in WriteMakefile(). In list context it returns a list of the files it
-found in t/test_manifest.
+in C<WriteMakefile()>. In list context it returns a list of the files it
+found in F<t/test_manifest>.
 
-If a t/test_manifest file does not exist, get_t_files() returns
+If a F<t/test_manifest> file does not exist, get_t_files() returns
 nothing.
 
-get_t_files() warns you if it can't find t/test_manifest, or if
-entries start with "t/". It skips blank lines, and strips Perl
+C<get_t_files()> warns you if it can't find F<t/test_manifest>, or if
+entries start with F<t/>. It skips blank lines, and strips Perl
 style comments from the file.
 
-Each line in t/test_manifest can have three parts: the test name,
+Each line in F<t/test_manifest> can have three parts: the test name,
 the test level (a floating point number), and a comment. By default,
 the test level is 1.
 
 	test_name.t 2  #Run this only for level 2 testing
 	
-Without an argument, get_t_files() returns all the test files it
+Without an argument, C<get_t_files()> returns all the test files it
 finds. With an argument that is true (so you can't use 0 as a level)
 and is a number, it skips tests with a level greater than that
 argument. You can then define sets of tests and choose a set to
@@ -141,9 +266,9 @@ to C<t/>. The filenames in the included are still relative to C<t/>.
 
 	;include t/file_with_other_test_names.txt
 
-Also experimentally, you can stop Test::Manifest from reading filenames
-with the C<;skip> directive. Test::Harness will skip the filenames up to
-the C<;unskip> directive (or end of file)
+Also experimentally, you can stop C<Test::Manifest> from reading
+filenames with the C<;skip> directive. C<Test::Manifest> will skip the
+filenames up to the C<;unskip> directive (or end of file):
 
 	run_this1
 	;skip
@@ -151,12 +276,16 @@ the C<;unskip> directive (or end of file)
 	;unskip
 	run_this2
 
-To select sets of tests, specify the level in the variable TEST_LEVEL
-during `make test`. 
+To select sets of tests, specify the level in the enviroment variable
+C<TEST_LEVEL>:
 
 	make test # run all tests no matter the level
 	make test TEST_LEVEL=2  # run all tests level 2 and below
 
+Eventually this will end up as an option to F<Build.PL>:
+
+	./Build test --testlevel=2  # Not yet supported
+	
 =cut
 
 sub get_t_files
@@ -168,8 +297,9 @@ sub get_t_files
 	%SeenInclude = ();
 	%SeenTest    = ();
 
+	my $Manifest = manifest_name();
 	carp( "$Manifest does not exist!" ) unless -e $Manifest;
-	my $result = _load_test_manifest($Manifest, $upper_bound);
+	my $result = _load_test_manifest( $Manifest, $upper_bound );
 	return unless defined $result;
 	my @tests = @{$result};
 	
@@ -180,7 +310,7 @@ sub get_t_files
 sub _load_test_manifest
 	{
 	my $manifest = shift;
-	return unless open my( $fh ), $manifest;
+	return unless open my( $fh ), '<', $manifest;
 
 	my $upper_bound = shift || 0;
 	my @tests = ();
@@ -269,8 +399,8 @@ sub _include_file
 	
 =item make_test_manifest()
 
-Creates the test_manifest file in the t directory by reading
-the contents of the t directory.
+Creates the test_manifest file in the t directory by reading the
+contents of the t directory.
 
 TO DO: specify tests in argument lists.
 
@@ -281,7 +411,7 @@ TO DO: specify files to skip.
 sub make_test_manifest()
 	{
 	carp( "t/ directory does not exist!" ) unless -d "t";
-	return unless open my( $fh ), "> $Manifest";
+	return unless open my( $fh ), '>',  manifest_name();
 
 	my $count = 0;
 	while( my $file = glob("t/*.t") )
@@ -301,10 +431,14 @@ Returns the name of the test manifest file, relative to t/
 
 =cut
 
+{
+my $Manifest = catfile( "t", "test_manifest" );
+
 sub manifest_name
 	{
 	return $Manifest;
 	}
+}
 
 =back
 
@@ -316,7 +450,7 @@ This source is in Github:
 
 =head1 CREDITS
 
-Matt Vanderpol suggested and supplied a patch for the ;include
+Matt Vanderpol suggested and supplied a patch for the C<;include>
 feature.
 
 =head1 AUTHOR
