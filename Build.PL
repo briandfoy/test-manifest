@@ -4,14 +4,7 @@ use warnings;
 
 use Module::Build;
 
-my $class = do {
-	if( eval "use Test::Manifest 2.00; 1" ) {
-		Test::Manifest->get_module_build_subclass;
-		}
-	else {
-		'Module::Build';
-		}
-	};
+my $class = 'Module::Build';
 	
 my $build = $class->new(
 	module_name       => 'Test::More',
