@@ -7,3 +7,4 @@ t/test_manifest
 *.bak
 Build
 _build
+META.yml
