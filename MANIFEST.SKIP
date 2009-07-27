@@ -2,7 +2,7 @@
 .cvsignore
 .lwpcookies
 .DS_Store
-Test-Manifest-*
+Test-Manifest-.*
 blib/
 hacks/
 CVS
@@ -24,3 +24,4 @@ t/test_manifest
 _build
 .git
 Build$
+META.yml
