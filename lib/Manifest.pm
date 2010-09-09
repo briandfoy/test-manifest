@@ -51,7 +51,7 @@ Test::Manifest - interact with a t/test_manifest file
 	my $build = $class->new( ... )
 
 	# in the file t/test_manifest, list the tests you want 
-	# to run
+	# to run in the order you want to run them
 	
 =head1 DESCRIPTION
 
@@ -62,19 +62,19 @@ interesting naming schemes for test files to get them in the desired
 order. This interesting names ossify when they get into source
 control, and get even more interesting as more tests show up.
 
-C<Test::Manifest> overrides the default test file order. Instead of running all of the
-F<t/*.t> files in ASCII-betical order, it looks in the F<t/test_manifest>
-file to find out which tests you want to run and the order in which
-you want to run them.  It constructs the right value for the build system to
-do the right thing. 
+C<Test::Manifest> overrides the default test file order. Instead of
+running all of the F<t/*.t> files in ASCII-betical order, it looks in
+the F<t/test_manifest> file to find out which tests you want to run
+and the order in which you want to run them.  It constructs the right
+value for the build system to do the right thing.
 
-In F<t/test_manifest>, simply list the tests that you want to run.  Their
-order in the file is the order in which they run.  You can comment
-lines with a C<#>, just like in Perl, and C<Test::Manifest> will strip
-leading and trailing whitespace from each line.  It also checks that
-the specified file is actually in the F<t/> directory.  If the file does
-not exist, it does not put its name in the list of test files to run and 
-it will issue a warning.
+In F<t/test_manifest>, simply list the tests that you want to run. 
+Their order in the file is the order in which they run.  You can
+comment lines with a C<#>, just like in Perl, and C<Test::Manifest>
+will strip leading and trailing whitespace from each line.  It also
+checks that the specified file is actually in the F<t/> directory.  If
+the file does not exist, it does not put its name in the list of test
+files to run and it will issue a warning.
 
 Optionally, you can add a number after the test name in test_manifest
 to define sets of tests. See C<get_t_files> for more information.
@@ -238,7 +238,7 @@ In scalar context it returns a single string that you can use directly
 in C<WriteMakefile()>. In list context it returns a list of the files it
 found in F<t/test_manifest>.
 
-If a F<t/test_manifest> file does not exist, get_t_files() returns
+If a F<t/test_manifest> file does not exist, C<get_t_files()> returns
 nothing.
 
 C<get_t_files()> warns you if it can't find F<t/test_manifest>, or if
@@ -400,7 +400,7 @@ sub _include_file
 =item make_test_manifest()
 
 Creates the test_manifest file in the t directory by reading the
-contents of the t directory.
+contents of the F<t/> directory.
 
 TO DO: specify tests in argument lists.
 
@@ -427,7 +427,7 @@ sub make_test_manifest()
 
 =item manifest_name()
 
-Returns the name of the test manifest file, relative to t/
+Returns the name of the test manifest file, relative to F<t/>.
 
 =cut
 
@@ -446,7 +446,7 @@ sub manifest_name
 
 This source is in Github:
 
-	http://github.com/briandfoy/Test-Manifest/tree/master
+	http://github.com/briandfoy/test-manifest/
 
 =head1 CREDITS
 
@@ -459,7 +459,7 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2009 brian d foy.  All rights reserved.
+Copyright (c) 2002-2010 brian d foy. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
