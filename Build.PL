@@ -7,16 +7,12 @@ use Module::Build;
 my $class = 'Module::Build';
 	
 my $build = $class->new(
-	module_name       => 'Test::More',
+	module_name       => 'Test::Manifest',
 	dist_abstract     => 'Interact with a t/test_manifest file',
 	dist_version_from => 'lib/Manifest.pm',
 	license           => 'perl',
 	dist_author       => 'brian d foy <bdfoy@cpan.org>',
 
-	recommends => {
-		'Test::Manifest'         => '1.23',
-		},
-		
 	build_requires => {
 		'Test::More'             => '0',
 		},
