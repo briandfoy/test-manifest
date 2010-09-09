@@ -7,8 +7,8 @@ my $test_manifest = File::Spec->catfile( qw(t test_manifest) );
 if($^O eq 'VMS') 	# http://perldoc.perl.org/perlvms.html#unlink-LIST
 	{
 	1 while ( unlink $test_manifest );
-	} 
-else 
+	}
+else
 	{
 	unlink $test_manifest;
 	}

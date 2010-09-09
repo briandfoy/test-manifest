@@ -5,7 +5,7 @@ use warnings;
 use Module::Build;
 
 my $class = 'Module::Build';
-	
+
 my $build = $class->new(
 	module_name       => 'Test::Manifest',
 	dist_abstract     => 'Interact with a t/test_manifest file',
@@ -16,7 +16,7 @@ my $build = $class->new(
 	build_requires => {
 		'Test::More'             => '0',
 		},
-		
+
 	requires       => {
 		'perl'                   => '5.008',
 		},
@@ -25,7 +25,7 @@ my $build = $class->new(
 		'lib/Manifest.pm' => 'lib/Test/Manifest.pm',
 		},
 
-	add_to_cleanup  => [ qw|Test-* t/test_manifest| ], 
+	add_to_cleanup  => [ qw|Test-* t/test_manifest| ],
 
 	meta_merge => {
 		resources => {

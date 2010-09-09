@@ -36,13 +36,13 @@ local $SIG{__WARN__} = sub { 1 };
 if( $^O eq 'VMS' ) 	# http://perldoc.perl.org/perlvms.html#unlink-LIST
 	{
 	1 while ( unlink manifest_name() );
-	} 
-else 
+	}
+else
 	{
 	unlink manifest_name();
 	}
 
--e manifest_name() ? 
+-e manifest_name() ?
 	fail( "test_manifest still around after unlink!") :
 	pass( "test_manifest unlinked") ;
 
@@ -62,17 +62,17 @@ copy( 'test_manifest_levels', manifest_name() );
 
 my @expected = ( [] );
 $expected[1] = [ qw( 00load.t 01get_test_files.t pod_coverage.t) ];
-$expected[2] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t 
+$expected[2] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t
 	pod_coverage.t ) ];
-$expected[3] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t 
+$expected[3] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t
 	leading_space.t pod_coverage.t trailing_space.t ) ];
-$expected[0] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t 
+$expected[0] = [ qw( 00load.t 01get_test_files.t 01make_test_manifest.t
 	leading_space.t pod_coverage.t trailing_space.t 99pod.t ) ];
-	
+
 foreach my $level ( 0 .. 3 )
 	{
 	my $string = get_t_files( $level );
-	my $expected = join ' ', map { File::Spec->catfile( 't', $_ ) } 
+	my $expected = join ' ', map { File::Spec->catfile( 't', $_ ) }
 		@{ $expected[$level] };
 	is( $string, $expected, "Level $level version of tests is right" );
 	}

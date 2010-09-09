@@ -47,12 +47,12 @@ Test::Manifest - interact with a t/test_manifest file
 			'Module::Build';
 			}
 		};
-	
+
 	my $build = $class->new( ... )
 
-	# in the file t/test_manifest, list the tests you want 
+	# in the file t/test_manifest, list the tests you want
 	# to run in the order you want to run them
-	
+
 =head1 DESCRIPTION
 
 C<Test::Harness> assumes that you want to run all of the F<.t> files
@@ -68,7 +68,7 @@ the F<t/test_manifest> file to find out which tests you want to run
 and the order in which you want to run them.  It constructs the right
 value for the build system to do the right thing.
 
-In F<t/test_manifest>, simply list the tests that you want to run. 
+In F<t/test_manifest>, simply list the tests that you want to run.
 Their order in the file is the order in which they run.  You can
 comment lines with a C<#>, just like in Perl, and C<Test::Manifest>
 will strip leading and trailing whitespace from each line.  It also
@@ -90,10 +90,10 @@ before you call C<WriteMakefile>. To make it optional, load it in an eval:
 
 =head2 Module::Build
 
-Overiding parts of C<Module::Build> is tricker if you want to use the 
+Overiding parts of C<Module::Build> is tricker if you want to use the
 subclassing mechanism and still make C<Test::Manifest> optional. If you
 can load C<Test::Manifest> (version 2.00 or later), C<Test::Manifest> can
-create the subclass for you. 
+create the subclass for you.
 
 	my $class = do {
 		if( eval 'Test::Manifest 2.00; 1' ) {
@@ -103,7 +103,7 @@ create the subclass for you.
 			'Module::Build' # if Test::Manifest isn't there
 			}
 		};
-		
+
 	$class->new( ... );
 	$class->create_build_file;
 
@@ -112,11 +112,11 @@ C<Test::Manifest> overrides C<find_test_files>, so you can get just
 that code to add to your own subclass code string:
 
 	my $code = eval 'Test::Manifest 2.00; 1'
-			? 
+			?
 		Test::Manifest->get_module_build_code_string
 			:
 		'';
-		
+
 	my $class = Module::Build->subclass(
 		...,
 		code => "$code\n...your subclass code string...",
@@ -131,8 +131,8 @@ that code to add to your own subclass code string:
 For C<Module::Build> only.
 
 Returns a C<Module::Build> subclass that overrides C<find_test_files>. If
-you want to have your own C<Module::Build> subclass and still use 
-C<Test::Manifest>, you can get just the code string with 
+you want to have your own C<Module::Build> subclass and still use
+C<Test::Manifest>, you can get just the code string with
 C<get_module_build_code_string>.
 
 =cut
@@ -141,7 +141,7 @@ sub get_module_build_subclass
 	{
 	my( $class ) = @_;
 
-	
+
 	require Module::Build;
 
 	my $class = Module::Build->subclass(
@@ -151,7 +151,7 @@ sub get_module_build_subclass
     	);
 
 	$class->log_info( "Using Test::Manifest $VERSION\n" );
-	
+
 	$class;
 	}
 
@@ -160,7 +160,7 @@ sub get_module_build_subclass
 For C<Module::Build> only.
 
 Returns the overridden C<find_test_files> as Perl code in a string suitable
-for the C<code> key in C<Module::Build->subclass()>. You can add this to other 
+for the C<code> key in C<Module::Build->subclass()>. You can add this to other
 bits you are overriding or extending.
 
 See C<Module::Build::Base::find_test_files> to see the base implementation.
@@ -173,22 +173,22 @@ sub get_module_build_code_string
 	 sub find_test_files {
 	 	my $self = shift;
 	 	my $p = $self->{properties};
-	 	
+
 	 	my( $level ) = grep { defined } (
 	 		$ENV{TEST_LEVEL},
 	 		$p->{ 'testlevel' },
 	 		0
 	 		);
-	 	
+
 	 	$self->log_verbose( "Test level is $level\n" );
-	 	
+
 		require Test::Manifest;
 		my @files = Test::Manifest::get_t_files( $level );
 		\@files;
 		}
 	}
 	}
-	
+
 =back
 
 =head2 Functions
@@ -218,15 +218,15 @@ sub run_t_manifest
 	unshift @INC, map { File::Spec->rel2abs($_) } @_[0,1];
 
 	my( $level ) = $_[2] || 0;
-	
+
 	print STDERR "Test::Manifest $VERSION\n"
 		if $Test::Harness::verbose;
-		
-	print STDERR "Level is $level\n" 
+
+	print STDERR "Level is $level\n"
 		if $Test::Harness::verbose;
-	
+
 	my @files = get_t_files( $level );
-	print STDERR "Test::Manifest::test_harness found [@files]\n" 
+	print STDERR "Test::Manifest::test_harness found [@files]\n"
 		if $Test::Harness::verbose;
 
 	Test::Harness::runtests( @files );
@@ -250,7 +250,7 @@ the test level (a floating point number), and a comment. By default,
 the test level is 1.
 
 	test_name.t 2  #Run this only for level 2 testing
-	
+
 Without an argument, C<get_t_files()> returns all the test files it
 finds. With an argument that is true (so you can't use 0 as a level)
 and is a number, it skips tests with a level greater than that
@@ -258,7 +258,7 @@ argument. You can then define sets of tests and choose a set to
 run. For instance, you might create a set for end users, but also
 add on a set for deeper testing for developers.
 
-Experimentally, you can include a command to grab test names from 
+Experimentally, you can include a command to grab test names from
 another file. The command starts with a C<;> to distinguish it
 from a true filename. The filename (currently) is relative to the
 current working directory, unlike the filenames, which are relative
@@ -285,7 +285,7 @@ C<TEST_LEVEL>:
 Eventually this will end up as an option to F<Build.PL>:
 
 	./Build test --testlevel=2  # Not yet supported
-	
+
 =cut
 
 sub get_t_files
@@ -293,7 +293,7 @@ sub get_t_files
 	my $upper_bound = shift;
 	print STDERR "# Test level is $upper_bound\n"
 		if $Test::Harness::verbose;
-	
+
 	%SeenInclude = ();
 	%SeenTest    = ();
 
@@ -302,7 +302,7 @@ sub get_t_files
 	my $result = _load_test_manifest( $Manifest, $upper_bound );
 	return unless defined $result;
 	my @tests = @{$result};
-	
+
 	return wantarray ? @tests : join " ", @tests;
 	}
 
@@ -324,13 +324,13 @@ sub _load_test_manifest
 		my( $command, $arg ) = split/\s+/, $_, 2;
 		if( ';' eq substr( $command, 0, 1 ) )
 			{
-			if( $command eq ';include' ) 
+			if( $command eq ';include' )
 				{
 				my $result = _include_file( $arg, $., $upper_bound );
 				push @tests, @$result if defined $result;
 				next;
 				}
-			elsif( $command eq ';skip' ) 
+			elsif( $command eq ';skip' )
 				{
 				while( <$fh> ) { last if m/^;unskip/ }
 				next LINE;
@@ -340,25 +340,25 @@ sub _load_test_manifest
 				croak( "Unknown directive: $command" );
 				}
 			}
-			
+
 		my( $test, $level ) = ( $command, $arg );
 		$level = 1 unless defined $level;
-		
+
 		next if( $upper_bound and $level > $upper_bound );
-		
+
 		carp( "Bad value for test [$test] level [$level]\n".
 			"Level should be a floating-point number\n" )
 			unless $level =~ m/^\d+(?:.\d+)?$/;
 		carp( "test file begins with t/ [$test]" ) if m|^t/|;
-		
+
 		$test = catfile( "t", $test ) if -e catfile( "t", $test );
-		
+
 		unless( -e $test )
 			{
 			carp( "test file [$test] does not exist! Skipping!" );
 			next;
 			}
-			
+
 		# Make sure we don't include a test we've already seen
 		next if exists $SeenTest{$test};
 
@@ -373,15 +373,15 @@ sub _load_test_manifest
 sub _include_file
 	{
 	my( $file, $line, $upper_bound ) = @_;
-	print STDERR "# Including file $file at line $line\n" 
+	print STDERR "# Including file $file at line $line\n"
 		if $Test::Harness::verbose;
-	
+
 	unless( -e $file )
 		{
 		carp( "$file does not exist" ) ;
 		return;
 		}
-	
+
 	if( exists $SeenInclude{$file} )
 		{
 		carp( "$file already loaded - skipping" ) ;
@@ -392,11 +392,11 @@ sub _include_file
 
 	my $result = _load_test_manifest( $file, $upper_bound );
 	return unless defined $result;
-	
+
 	$result;
 	}
-	
-	
+
+
 =item make_test_manifest()
 
 Creates the test_manifest file in the t directory by reading the
