@@ -8,3 +8,4 @@ t/test_manifest
 Build
 _build
 META.yml
+MYMETA.yml

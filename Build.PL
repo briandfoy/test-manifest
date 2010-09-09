@@ -26,6 +26,14 @@ my $build = $class->new(
 		},
 
 	add_to_cleanup  => [ qw|Test-* t/test_manifest| ], 
+
+	meta_merge => {
+		resources => {
+			bugtracker   => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Manifest',
+			repository   => 'http://github.com/briandfoy/test-manifest',
+			cheezburgers => 'http://icanhascheezburger.com/',
+			},
+		},
 	);
 
 $build->create_build_script;
