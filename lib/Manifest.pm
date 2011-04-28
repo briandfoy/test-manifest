@@ -59,7 +59,7 @@ C<Test::Harness> assumes that you want to run all of the F<.t> files
 in the F<t/> directory in ASCII-betical order during C<make test> or
 C<./Build test> unless you say otherwise.  This leads to some
 interesting naming schemes for test files to get them in the desired
-order. This interesting names ossify when they get into source
+order. These interesting names ossify when they get into source
 control, and get even more interesting as more tests show up.
 
 C<Test::Manifest> overrides the default test file order. Instead of
@@ -86,7 +86,7 @@ inserts itself in the C<test_via_harness> step by providing its own
 test runner. In C<Makefile.PL>, all you have to do is load C<Test::Manifest>
 before you call C<WriteMakefile>. To make it optional, load it in an eval:
 
-	eval "use Test::Manifest;
+	eval "use Test::Manifest";
 
 =head2 Module::Build
 
