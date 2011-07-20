@@ -4,6 +4,9 @@
 	the t/ added to its path. Test::Manifest should only
 	warn about and skip missing files.
 
+2.00_01 - Wed Jul 20 01:02:11 2011
+	* Work with Module::Build by supplying a subclass.
+
 1.23 - Fri Jul 17 03:04:38 2009
 	* Move everything to git and finally make a release
 
