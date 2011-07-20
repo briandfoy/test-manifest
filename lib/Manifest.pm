@@ -13,7 +13,7 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '2.00';
+$VERSION = '2.00_01';
 
 my %SeenInclude = ();
 my %SeenTest = ();
@@ -41,7 +41,7 @@ Test::Manifest - interact with a t/test_manifest file
 	# in Build.PL
 	my $class = do {
 		if( eval "Test::Manifest 2.00" ) {
-			Test::Manifest->module_build_subclass;
+			Test::Manifest->get_module_build_subclass;
 			}
 		else {
 			'Module::Build';
