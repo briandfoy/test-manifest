@@ -27,7 +27,7 @@ my $build = $class->new(
 		resources => {
 			bugtracker   => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Manifest',
 			repository   => 'http://github.com/briandfoy/test-manifest',
-			cheezburgers => 'http://icanhascheezburger.com/',
+			#cheezburgers => 'http://icanhascheezburger.com/',
 			},
 		},
 	);
