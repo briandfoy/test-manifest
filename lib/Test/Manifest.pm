@@ -13,15 +13,14 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '2.00_01';
+$VERSION = '2.01';
 
 my %SeenInclude = ();
 my %SeenTest = ();
 
 require 5.006;
 
-sub MY::test_via_harness
-	{
+sub MY::test_via_harness {
 	my($self, $perl, $tests) = @_;
 
 	return qq|\t$perl "-MTest::Manifest" | .
@@ -137,8 +136,7 @@ C<get_module_build_code_string>.
 
 =cut
 
-sub get_module_build_subclass
-	{
+sub get_module_build_subclass {
 	my( $class ) = @_;
 
 
@@ -167,8 +165,7 @@ See C<Module::Build::Base::find_test_files> to see the base implementation.
 
 =cut
 
-sub get_module_build_code_string
-	{
+sub get_module_build_code_string {
 	 q{
 	 sub find_test_files {
 	 	my $self = shift;
@@ -207,8 +204,7 @@ in the order they appear in the file. This is inserted automatically
 
 =cut
 
-sub run_t_manifest
-	{
+sub run_t_manifest {
 	require Test::Harness;
 	require File::Spec;
 
@@ -288,8 +284,7 @@ Eventually this will end up as an option to F<Build.PL>:
 
 =cut
 
-sub get_t_files
-	{
+sub get_t_files {
 	my $upper_bound = shift;
 	print STDERR "# Test level is $upper_bound\n"
 		if $Test::Harness::verbose;
@@ -307,36 +302,30 @@ sub get_t_files
 	}
 
 # Wrapper for loading test manifest files to support including other files
-sub _load_test_manifest
-	{
+sub _load_test_manifest {
 	my $manifest = shift;
 	return unless open my( $fh ), '<', $manifest;
 
 	my $upper_bound = shift || 0;
 	my @tests = ();
 
-	LINE: while( <$fh> )
-		{
+	LINE: while( <$fh> ) {
 		s/#.*//; s/^\s+//; s/\s+$//;
 
 		next unless $_;
 
 		my( $command, $arg ) = split/\s+/, $_, 2;
-		if( ';' eq substr( $command, 0, 1 ) )
-			{
-			if( $command eq ';include' )
-				{
+		if( ';' eq substr( $command, 0, 1 ) ) {
+			if( $command eq ';include' ) {
 				my $result = _include_file( $arg, $., $upper_bound );
 				push @tests, @$result if defined $result;
 				next;
 				}
-			elsif( $command eq ';skip' )
-				{
+			elsif( $command eq ';skip' ) {
 				while( <$fh> ) { last if m/^;unskip/ }
 				next LINE;
 				}
-			else
-				{
+			else {
 				croak( "Unknown directive: $command" );
 				}
 			}
@@ -353,8 +342,7 @@ sub _load_test_manifest
 
 		$test = catfile( "t", $test ) if -e catfile( "t", $test );
 
-		unless( -e $test )
-			{
+		unless( -e $test ) {
 			carp( "test file [$test] does not exist! Skipping!" );
 			next;
 			}
@@ -370,20 +358,17 @@ sub _load_test_manifest
 	return \@tests;
 	}
 
-sub _include_file
-	{
+sub _include_file {
 	my( $file, $line, $upper_bound ) = @_;
 	print STDERR "# Including file $file at line $line\n"
 		if $Test::Harness::verbose;
 
-	unless( -e $file )
-		{
+	unless( -e $file ) {
 		carp( "$file does not exist" ) ;
 		return;
 		}
 
-	if( exists $SeenInclude{$file} )
-		{
+	if( exists $SeenInclude{$file} ) {
 		carp( "$file already loaded - skipping" ) ;
 		return;
 		}
@@ -408,14 +393,12 @@ TO DO: specify files to skip.
 
 =cut
 
-sub make_test_manifest()
-	{
+sub make_test_manifest() {
 	carp( "t/ directory does not exist!" ) unless -d "t";
 	return unless open my( $fh ), '>',  manifest_name();
 
 	my $count = 0;
-	while( my $file = glob("t/*.t") )
-		{
+	while( my $file = glob("t/*.t") ) {
 		$file =~ s|^t/||;
 		print $fh "$file\n";
 		$count++;
@@ -434,8 +417,7 @@ Returns the name of the test manifest file, relative to F<t/>.
 {
 my $Manifest = catfile( "t", "test_manifest" );
 
-sub manifest_name
-	{
+sub manifest_name {
 	return $Manifest;
 	}
 }
@@ -459,7 +441,7 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2010 brian d foy. All rights reserved.
+Copyright (c) 2002-2013 brian d foy. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

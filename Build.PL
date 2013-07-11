@@ -9,7 +9,7 @@ my $class = 'Module::Build';
 my $build = $class->new(
 	module_name       => 'Test::Manifest',
 	dist_abstract     => 'Interact with a t/test_manifest file',
-	dist_version_from => 'lib/Manifest.pm',
+	dist_version_from => 'lib/Test/Manifest.pm',
 	license           => 'perl',
 	dist_author       => 'brian d foy <bdfoy@cpan.org>',
 
@@ -19,10 +19,6 @@ my $build = $class->new(
 
 	requires       => {
 		'perl'                   => '5.008',
-		},
-
-	pm_files        => {
-		'lib/Manifest.pm' => 'lib/Test/Manifest.pm',
 		},
 
 	add_to_cleanup  => [ qw|Test-* t/test_manifest| ],
