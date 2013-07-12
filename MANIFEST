@@ -1,7 +1,7 @@
-Build.PL
+Makefile.PL
 Changes
 examples/README
-lib/Manifest.pm
+lib/Test/Manifest.pm
 LICENSE
 MANIFEST			This list of files
 README
@@ -17,3 +17,5 @@ t/trailing_space.t
 test_manifest
 test_manifest_levels
 test_manifest_with_include
+META.yml
+META.json
