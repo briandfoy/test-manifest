@@ -9,7 +9,6 @@ CVS
 Makefile.old
 MANIFEST.SKIP
 MANIFEST.bak
-Makefile.PL
 Makefile$
 .ts$
 pm_to_blib
@@ -17,7 +16,6 @@ blibdir
 Makefile$
 ~$
 .rej$
-t/test_manifest
 .bak$
 .old$
 .svn
