@@ -27,5 +27,5 @@ WriteMakefile(
 			keywords => [ 'module', 'distribution', 'test' ],
 	  		},
 
-	clean => { FILES => '*.bak release-* Module-*' },
+	clean => { FILES => '*.bak release-* Test-*' },
 	);
