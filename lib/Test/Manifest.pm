@@ -13,7 +13,7 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '2.00_001';
+$VERSION = '2.01';
 
 my %SeenInclude = ();
 my %SeenTest = ();
@@ -441,7 +441,7 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2013 brian d foy. All rights reserved.
+Copyright (c) 2002-2014 brian d foy. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
