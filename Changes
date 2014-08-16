@@ -1,5 +1,8 @@
 Changes for Test::Manifest
 
+2.01 - Sat Aug 16 17:47:27 2014
+	* Bump to release version
+
 2.00_001 - Thu Jul 11 20:22:40 2013
 	* Switch back to Makefile.PL—so much simpler
 
