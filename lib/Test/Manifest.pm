@@ -13,7 +13,7 @@ use File::Spec::Functions qw(catfile);
 @EXPORT    = qw(run_t_manifest);
 @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '2.01';
+$VERSION = '2.02';
 
 my %SeenInclude = ();
 my %SeenTest = ();
@@ -272,7 +272,7 @@ filenames up to the C<;unskip> directive (or end of file):
 	;unskip
 	run_this2
 
-To select sets of tests, specify the level in the enviroment variable
+To select sets of tests, specify the level in the environment variable
 C<TEST_LEVEL>:
 
 	make test # run all tests no matter the level
