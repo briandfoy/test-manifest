@@ -1,5 +1,8 @@
 Changes for Test::Manifest
 
+2.02 - Tue Aug 26 13:01:43 2014
+	Fix rt.cpan.org #98288: fix a spelling mistake
+
 2.00_001 - Thu Jul 11 20:22:40 2013
 	* Switch back to Makefile.PL—so much simpler
 
