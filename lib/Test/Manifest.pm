@@ -78,9 +78,9 @@ files to run and it will issue a warning.
 Optionally, you can add a number after the test name in test_manifest
 to define sets of tests. See C<get_t_files> for more information.
 
-=head2 ExtUtils::Makemaker
+=head2 ExtUtils::MakeMaker
 
-To override the test order behaviour in C<Makemaker>, C<Test::Manifest>
+To override the test order behaviour in C<MakeMaker>, C<Test::Manifest>
 inserts itself in the C<test_via_harness> step by providing its own
 test runner. In C<Makefile.PL>, all you have to do is load C<Test::Manifest>
 before you call C<WriteMakefile>. To make it optional, load it in an eval:
@@ -194,7 +194,7 @@ sub get_module_build_code_string {
 
 =item run_t_manifest( TEST_VERBOSE, INST_LIB, INST_ARCHLIB, TEST_LEVEL )
 
-For C<Makemaker> only. You don't have to mess with this at the user
+For C<MakeMaker> only. You don't have to mess with this at the user
 level.
 
 Run all of the files in F<t/test_manifest> through C<Test::Harness:runtests>
