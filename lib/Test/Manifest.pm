@@ -39,7 +39,7 @@ Test::Manifest - interact with a t/test_manifest file
 
 	# in Build.PL
 	my $class = do {
-		if( eval "Test::Manifest 2.00" ) {
+		if( eval 'use Test::Manifest 2.00; 1' ) {
 			Test::Manifest->get_module_build_subclass;
 			}
 		else {
@@ -95,7 +95,7 @@ can load C<Test::Manifest> (version 2.00 or later), C<Test::Manifest> can
 create the subclass for you.
 
 	my $class = do {
-		if( eval 'Test::Manifest 2.00; 1' ) {
+		if( eval 'use Test::Manifest 2.00; 1' ) {
 			Test::Manifest->get_module_build_subclass;
 			}
 		else {
@@ -110,7 +110,7 @@ This is a bit of a problem when you already have your own subclass.
 C<Test::Manifest> overrides C<find_test_files>, so you can get just
 that code to add to your own subclass code string:
 
-	my $code = eval 'Test::Manifest 2.00; 1'
+	my $code = eval 'use Test::Manifest 2.00; 1'
 			?
 		Test::Manifest->get_module_build_code_string
 			:
@@ -434,6 +434,8 @@ This source is in Github:
 
 Matt Vanderpol suggested and supplied a patch for the C<;include>
 feature.
+
+Olivier MenguE<eacute> supplied a documentation patch.
 
 =head1 AUTHOR
 
