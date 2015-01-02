@@ -69,13 +69,13 @@ Changes for Test::Manifest
 0.95 - Thu Sep  2 15:59:26 2004
 * Test::Manifest is now more tolerant of sloppiness.  It strips leading
 and trailing whitespace as it reads lines from test_manifest, and it
-skips comment lines.  
+skips comment lines.
 * If you already have Test::Manifest, you don't need to rush to get this
 new version unless you have a problem with whitespace issues.
 
 0.93 - Fri Feb 20 15:18:23 2004
 	* some minor tweaks for warnings, clarity
-	* docs show way to make Test::Manifest optional (should have thought 
+	* docs show way to make Test::Manifest optional (should have thought
 	of it sooner)
 
 0.92 - Wed Jul 30 14:10:00 2003
@@ -85,7 +85,7 @@ new version unless you have a problem with whitespace issues.
 	* Added POD tests.
 
 0.91 - Wed Dec 11 00:48:55 2002
-	* require ExtUtils::MakeMaker 6.x so the right run_tests is 
+	* require ExtUtils::MakeMaker 6.x so the right run_tests is
 	available
 
 0.9 - Thu Oct 10 00:27:13 EDT 2002
