@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 13;
+use Test::More 0.95;
 
 use File::Copy qw(copy);
 use File::Spec;
@@ -78,3 +78,5 @@ foreach my $level ( 0 .. 3 )
 	}
 
 }
+
+done_testing();
