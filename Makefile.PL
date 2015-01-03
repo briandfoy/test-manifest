@@ -19,13 +19,20 @@ WriteMakefile(
 
 	MIN_PERL_VERSION => 5.006,
 
-	META_MERGE => {
-			resources => {
-				bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Manifest',
-		  		repository => 'git://github.com/briandfoy/test-manifest.git',
+	'META_MERGE' => {
+		"meta-spec" => { version => 2 },
+		resources => {
+			repository => {
+				type => 'git',
+				url => 'git://github.com/briandfoy/test-manifest.git',
+				web => 'https://github.com/briandfoy/test-manifest',
 				},
-			keywords => [ 'module', 'distribution', 'test' ],
-	  		},
+
+			bugtracker => {
+				web => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Manifest',
+				mailto => 'bug-Test-Manifest@rt.cpan.org',
+				},
+			},
 
 	clean => { FILES => '*.bak release-* Test-*' },
 	);
