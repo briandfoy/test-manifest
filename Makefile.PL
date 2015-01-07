@@ -1,38 +1,68 @@
-use ExtUtils::MakeMaker 6.48;
+require 5.008;
 use strict;
 use warnings;
 
-require 5.006;
 
-eval "use Test::Manifest 1.21";
+my $github    = 'https://github.com/briandfoy/test-manifest';
+my $main_file = 'lib/Test/Manifest';
 
-WriteMakefile(
-	'NAME'	       => 'Test::Manifest',
-	'AUTHOR'       => 'brian d foy <bdfoy@cpan.org>',
-	'ABSTRACT'     => 'Interact with a t/test_manifest file',
-	'VERSION_FROM' => "lib/Test/Manifest.pm",
-	'LICENSE'      => 'perl',
+my %WriteMakefile = (
+	'NAME'	        => 'Test::Manifest',
+	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
+	'ABSTRACT_FROM' => $main_file,
+	'VERSION_FROM'  => $main_file,
+	'LICENSE'       => 'perl',
 
-	'PREREQ_PM'    => {
-		'Test::More'         => '0.95',
+	'MIN_PERL_VERSION' => 5.008,
+
+	'CONFIGURE_REQUIRES' => {
+		'ExtUtils::MakeMaker' => '6.64',
 		},
 
-	MIN_PERL_VERSION => 5.006,
+	'BUILD_REQUIRES' => {
+		},
+
+	'TEST_REQUIRES' => {
+		'Test::More' => '0.94',
+		},
+
+	'PREREQ_PM'     => {
+		},
 
 	'META_MERGE' => {
-		"meta-spec" => { version => 2 },
+		'meta-spec' => { version => 2 },
 		resources => {
 			repository => {
 				type => 'git',
-				url => 'git://github.com/briandfoy/test-manifest.git',
-				web => 'https://github.com/briandfoy/test-manifest',
+				url  => "$github.git",
+				web  => $github,
 				},
-
-			bugtracker => {
-				web => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Manifest',
-				mailto => 'bug-Test-Manifest@rt.cpan.org',
+			bugtraker => {
+				web    => "$github/issues",
 				},
+			homepage => $github,
 			},
+		},
 
 	clean => { FILES => '*.bak release-* Test-*' },
 	);
+
+sub arguments { \%WriteMakefile }
+
+do_it() unless caller;
+sub do_it {
+	require File::Spec;
+	my $MM ='ExtUtils::MakeMaker';
+	my $MM_version =
+		eval{ "$MM " . $WriteMakefile{'CONFIGURE_REQUIRES'}{'ExtUtils::MakeMaker'} }
+			//
+		"$MM 6.64";
+	eval "use $MM_version";
+	eval "use Test::Manifest 1.21" 
+		if -e File::Spec->catfile( qw(t test_manifest) );
+	WriteMakefile( %WriteMakefile );
+	}
+
+
+no warnings;
+__PACKAGE__;
