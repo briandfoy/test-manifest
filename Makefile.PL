@@ -2,18 +2,20 @@ require 5.008;
 use strict;
 use warnings;
 
+use File::Spec::Functions qw(catfile);
 
+my $module    = 'Test::Manifest';
 my $github    = 'https://github.com/briandfoy/test-manifest';
-my $main_file = 'lib/Test/Manifest';
+my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
 my %WriteMakefile = (
-	'NAME'	        => 'Test::Manifest',
+	'MIN_PERL_VERSION' => 5.008,
+
+	'NAME'	        => $module,
 	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
 	'ABSTRACT_FROM' => $main_file,
 	'VERSION_FROM'  => $main_file,
 	'LICENSE'       => 'perl',
-
-	'MIN_PERL_VERSION' => 5.008,
 
 	'CONFIGURE_REQUIRES' => {
 		'ExtUtils::MakeMaker' => '6.64',
