@@ -1,10 +1,12 @@
 require 5.008;
+
+package Test::Manifest;
 use strict;
 use warnings;
 
 use File::Spec::Functions qw(catfile);
 
-my $module    = 'Test::Manifest';
+my $module    = __PACKAGE__;
 my $github    = 'https://github.com/briandfoy/test-manifest';
 my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
@@ -18,7 +20,8 @@ my %WriteMakefile = (
 	'LICENSE'       => 'perl',
 
 	'CONFIGURE_REQUIRES' => {
-		'ExtUtils::MakeMaker' => '6.64',
+		'ExtUtils::MakeMaker'   => '6.64',
+		'File::Spec::Functions' => '0',
 		},
 
 	'BUILD_REQUIRES' => {
