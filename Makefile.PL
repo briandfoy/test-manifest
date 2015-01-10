@@ -49,7 +49,7 @@ my %WriteMakefile = (
 			},
 		},
 
-	clean => { FILES => '*.bak release-* Test-*' },
+	clean => { FILES => "$dist-*" },
 	);
 
 sub arguments { \%WriteMakefile }
