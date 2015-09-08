@@ -28,6 +28,8 @@ sub MY::test_via_harness {
 		   qq|'\$(INST_ARCHLIB)', \$(TEST_LEVEL) )"\n|;
 	};
 
+=encoding utf8
+
 =head1 NAME
 
 Test::Manifest - interact with a t/test_manifest file
