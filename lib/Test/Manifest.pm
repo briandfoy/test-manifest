@@ -4,8 +4,8 @@ use strict;
 use warnings;
 no warnings;
 
-use base qw(Exporter);
 use vars qw(@EXPORT_OK @EXPORT $VERSION);
+use Exporter qw(import);
 
 use Carp qw(carp);
 use File::Spec::Functions qw(catfile);
