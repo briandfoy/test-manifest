@@ -341,9 +341,10 @@ sub _load_test_manifest {
 			unless $level =~ m/^\d+(?:.\d+)?$/;
 		carp( "test file begins with t/ [$test]" ) if m|^t/|;
 
-		$test = catfile( "t", $test ) if -e catfile( "t", $test );
-
-		unless( -e $test ) {
+		if( -e catfile( "t", $test ) ) {
+			$test = catfile( "t", $test )
+			}
+		else {
 			carp( "test file [$test] does not exist! Skipping!" );
 			next;
 			}
