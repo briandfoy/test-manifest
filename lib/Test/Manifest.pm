@@ -315,7 +315,7 @@ sub _load_test_manifest {
 
 		next unless $_;
 
-		my( $command, $arg ) = split/\s+/, $_, 2;
+		my( $command, $arg ) = split /\s+/, $_, 2;
 		if( ';' eq substr( $command, 0, 1 ) ) {
 			if( $command eq ';include' ) {
 				my $result = _include_file( $arg, $., $upper_bound );
