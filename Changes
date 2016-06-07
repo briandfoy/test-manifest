@@ -1,5 +1,8 @@
 Revision history for Perl module Test::Manifest
 
+2.02_01 2016-06-07T20:39:40Z
+	* Start tracking down odd get_test_files failures.
+
 2.02 - 2014-08-26
 	* Fix rt.cpan.org #98288: fix a spelling mistake
 
