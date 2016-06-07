@@ -4,16 +4,15 @@ use strict;
 use warnings;
 no warnings;
 
-use vars qw(@EXPORT_OK @EXPORT $VERSION);
 use Exporter qw(import);
 
 use Carp qw(carp);
 use File::Spec::Functions qw(catfile);
 
-@EXPORT    = qw(run_t_manifest);
-@EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
+our @EXPORT    = qw(run_t_manifest);
+our @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-$VERSION = '2.02';
+our $VERSION = '2.02_01';
 
 my %SeenInclude = ();
 my %SeenTest = ();
