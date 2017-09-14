@@ -62,6 +62,7 @@ my %WriteMakefile = (
 
 	'TEST_REQUIRES' => {
 		'Test::More' => '1',
+		'File::Temp' => '0',
 		},
 
 	'PREREQ_PM'     => {
