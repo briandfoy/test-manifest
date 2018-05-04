@@ -12,7 +12,7 @@ use File::Spec::Functions qw(catfile);
 our @EXPORT    = qw(run_t_manifest);
 our @EXPORT_OK = qw(get_t_files make_test_manifest manifest_name);
 
-our $VERSION = '2.02_01';
+our $VERSION = '2.021';
 
 my %SeenInclude = ();
 my %SeenTest = ();
@@ -437,7 +437,7 @@ This source is in Github:
 Matt Vanderpol suggested and supplied a patch for the C<;include>
 feature.
 
-Olivier MenguE<eacute> supplied a documentation patch.
+Olivier Mengué supplied a documentation patch.
 
 =head1 AUTHOR
 
@@ -445,10 +445,10 @@ brian d foy, C<< <bdfoy@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright © 2002-2015, brian d foy <bdfoy@cpan.org>. All rights reserved.
+Copyright © 2002-2018, brian d foy <bdfoy@cpan.org>. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+it under the terms of the Artistic License 2.0.
 
 =cut
 
