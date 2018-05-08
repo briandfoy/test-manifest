@@ -1,5 +1,8 @@
 Revision history for Perl module Test::Manifest
 
+2.021 2018-05-08T02:47:56Z
+	* Clarify that it's the Artistic License 2.0
+
 2.02_01 2016-06-07T20:39:40Z
 	* Start tracking down odd get_test_files failures.
 
