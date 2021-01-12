@@ -63,3 +63,6 @@
 \.lwpcookies
 Test-Manifest-.*
 hacks/
+\bMANIFEST\s\d
+\bChanges\s\d
+
