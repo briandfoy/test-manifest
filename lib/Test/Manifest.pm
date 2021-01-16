@@ -17,7 +17,7 @@ our $VERSION = '2.022';
 my %SeenInclude = ();
 my %SeenTest = ();
 
-require 5.006;
+require 5.008;
 
 sub MY::test_via_harness {
 	my($self, $perl, $tests) = @_;
