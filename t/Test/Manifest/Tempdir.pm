@@ -1,5 +1,5 @@
 package # Don't index by CPAN
-	Test::Manifest::_Tempdir;
+	Test::Manifest::Tempdir;
 
 =head1 Test::Manifest::_Tempdir
 
