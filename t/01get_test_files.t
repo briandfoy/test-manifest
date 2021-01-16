@@ -7,7 +7,7 @@ use File::Spec;
 
 use Test::Manifest qw(get_t_files manifest_name);
 use lib './t';
-use Test::Manifest::_Tempdir qw(prepare_tmp_dir);
+use Test::Manifest::Tempdir qw(prepare_tmp_dir);
 
 my $tmp_dir = prepare_tmp_dir();
 copy($_, $tmp_dir) or die "Cannot copy $_ to $tmp_dir: $!"

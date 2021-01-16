@@ -5,7 +5,7 @@ use File::Copy qw(copy);
 
 use Test::Manifest qw(make_test_manifest manifest_name);
 use lib './t';
-use Test::Manifest::_Tempdir qw(prepare_tmp_dir);
+use Test::Manifest::Tempdir qw(prepare_tmp_dir);
 
 my $tmp_dir = prepare_tmp_dir();
 chdir $tmp_dir or die "Cannot chdir to $tmp_dir: $!";
