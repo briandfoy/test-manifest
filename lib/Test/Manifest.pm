@@ -90,7 +90,7 @@ before you call C<WriteMakefile>. To make it optional, load it in an eval:
 
 =head2 Module::Build
 
-Overiding parts of C<Module::Build> is tricker if you want to use the
+Overriding parts of C<Module::Build> is tricker if you want to use the
 subclassing mechanism and still make C<Test::Manifest> optional. If you
 can load C<Test::Manifest> (version 2.00 or later), C<Test::Manifest> can
 create the subclass for you.
