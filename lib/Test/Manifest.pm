@@ -223,7 +223,7 @@ sub run_t_manifest {
 		if $Test::Harness::verbose;
 
 	my @files = get_t_files( $level );
-	print STDERR "Test::Manifest::test_harness found [@files]\n"
+	print STDERR "Test::Manifest: test harness found [@files]\n"
 		if $Test::Harness::verbose;
 
 	Test::Harness::runtests( @files );
